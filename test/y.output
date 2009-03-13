@@ -1,0 +1,176 @@
+Grammar
+
+    0 $accept: expressions $end
+
+    1 expressions: expression
+    2            | expressions expression
+
+    3 expression: list
+    4           | INTEGER
+    5           | SYMBOL
+
+    6 list: LIST_START expression LIST_END
+    7     | LIST_START expression expression LIST_END
+    8     | LIST_START expression expression expression LIST_END
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+INTEGER (258) 4
+SYMBOL (259) 5
+LIST_START (260) 6 7 8
+LIST_END (261) 6 7 8
+
+
+Nonterminals, with rules where they appear
+
+$accept (7)
+    on left: 0
+expressions (8)
+    on left: 1 2, on right: 0 2
+expression (9)
+    on left: 3 4 5, on right: 1 2 6 7 8
+list (10)
+    on left: 6 7 8, on right: 3
+
+
+state 0
+
+    0 $accept: . expressions $end
+
+    INTEGER     shift, and go to state 1
+    SYMBOL      shift, and go to state 2
+    LIST_START  shift, and go to state 3
+
+    expressions  go to state 4
+    expression   go to state 5
+    list         go to state 6
+
+
+state 1
+
+    4 expression: INTEGER .
+
+    $default  reduce using rule 4 (expression)
+
+
+state 2
+
+    5 expression: SYMBOL .
+
+    $default  reduce using rule 5 (expression)
+
+
+state 3
+
+    6 list: LIST_START . expression LIST_END
+    7     | LIST_START . expression expression LIST_END
+    8     | LIST_START . expression expression expression LIST_END
+
+    INTEGER     shift, and go to state 1
+    SYMBOL      shift, and go to state 2
+    LIST_START  shift, and go to state 3
+
+    expression  go to state 7
+    list        go to state 6
+
+
+state 4
+
+    0 $accept: expressions . $end
+    2 expressions: expressions . expression
+
+    $end        shift, and go to state 8
+    INTEGER     shift, and go to state 1
+    SYMBOL      shift, and go to state 2
+    LIST_START  shift, and go to state 3
+
+    expression  go to state 9
+    list        go to state 6
+
+
+state 5
+
+    1 expressions: expression .
+
+    $default  reduce using rule 1 (expressions)
+
+
+state 6
+
+    3 expression: list .
+
+    $default  reduce using rule 3 (expression)
+
+
+state 7
+
+    6 list: LIST_START expression . LIST_END
+    7     | LIST_START expression . expression LIST_END
+    8     | LIST_START expression . expression expression LIST_END
+
+    INTEGER     shift, and go to state 1
+    SYMBOL      shift, and go to state 2
+    LIST_START  shift, and go to state 3
+    LIST_END    shift, and go to state 10
+
+    expression  go to state 11
+    list        go to state 6
+
+
+state 8
+
+    0 $accept: expressions $end .
+
+    $default  accept
+
+
+state 9
+
+    2 expressions: expressions expression .
+
+    $default  reduce using rule 2 (expressions)
+
+
+state 10
+
+    6 list: LIST_START expression LIST_END .
+
+    $default  reduce using rule 6 (list)
+
+
+state 11
+
+    7 list: LIST_START expression expression . LIST_END
+    8     | LIST_START expression expression . expression LIST_END
+
+    INTEGER     shift, and go to state 1
+    SYMBOL      shift, and go to state 2
+    LIST_START  shift, and go to state 3
+    LIST_END    shift, and go to state 12
+
+    expression  go to state 13
+    list        go to state 6
+
+
+state 12
+
+    7 list: LIST_START expression expression LIST_END .
+
+    $default  reduce using rule 7 (list)
+
+
+state 13
+
+    8 list: LIST_START expression expression expression . LIST_END
+
+    LIST_END  shift, and go to state 14
+
+
+state 14
+
+    8 list: LIST_START expression expression expression LIST_END .
+
+    $default  reduce using rule 8 (list)

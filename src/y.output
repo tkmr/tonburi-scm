@@ -1,0 +1,197 @@
+文法
+
+    0 $accept: program $end
+
+    1 program: expression
+    2        | expression program
+
+    3 expression: list
+    4           | INTEGER
+    5           | SYMBOL
+    6           | STRING
+
+    7 list: LIST_START expression list_expression LIST_END
+    8     | LIST_START expression LIST_END
+
+    9 list_expression: expression list_expression
+   10                | expression
+
+
+出現位置の規則による終端
+
+$end (0) 0
+error (256)
+INTEGER (258) 4
+SYMBOL (259) 5
+STRING (260) 6
+LIST_START (261) 7 8
+LIST_END (262) 7 8
+
+
+出現位置の規則による非終端
+
+$accept (8)
+    左辺: 0
+program (9)
+    左辺: 1 2, 右辺: 0 2
+expression (10)
+    左辺: 3 4 5 6, 右辺: 1 2 7 8 9 10
+list (11)
+    左辺: 7 8, 右辺: 3
+list_expression (12)
+    左辺: 9 10, 右辺: 7 9
+
+
+状態 0
+
+    0 $accept: . program $end
+
+    INTEGER     shift, and go to state 1
+    SYMBOL      shift, and go to state 2
+    STRING      shift, and go to state 3
+    LIST_START  shift, and go to state 4
+
+    program     go to state 5
+    expression  go to state 6
+    list        go to state 7
+
+
+状態 1
+
+    4 expression: INTEGER .
+
+    $default  reduce using rule 4 (expression)
+
+
+状態 2
+
+    5 expression: SYMBOL .
+
+    $default  reduce using rule 5 (expression)
+
+
+状態 3
+
+    6 expression: STRING .
+
+    $default  reduce using rule 6 (expression)
+
+
+状態 4
+
+    7 list: LIST_START . expression list_expression LIST_END
+    8     | LIST_START . expression LIST_END
+
+    INTEGER     shift, and go to state 1
+    SYMBOL      shift, and go to state 2
+    STRING      shift, and go to state 3
+    LIST_START  shift, and go to state 4
+
+    expression  go to state 8
+    list        go to state 7
+
+
+状態 5
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 9
+
+
+状態 6
+
+    1 program: expression .
+    2        | expression . program
+
+    INTEGER     shift, and go to state 1
+    SYMBOL      shift, and go to state 2
+    STRING      shift, and go to state 3
+    LIST_START  shift, and go to state 4
+
+    $default  reduce using rule 1 (program)
+
+    program     go to state 10
+    expression  go to state 6
+    list        go to state 7
+
+
+状態 7
+
+    3 expression: list .
+
+    $default  reduce using rule 3 (expression)
+
+
+状態 8
+
+    7 list: LIST_START expression . list_expression LIST_END
+    8     | LIST_START expression . LIST_END
+
+    INTEGER     shift, and go to state 1
+    SYMBOL      shift, and go to state 2
+    STRING      shift, and go to state 3
+    LIST_START  shift, and go to state 4
+    LIST_END    shift, and go to state 11
+
+    expression       go to state 12
+    list             go to state 7
+    list_expression  go to state 13
+
+
+状態 9
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+状態 10
+
+    2 program: expression program .
+
+    $default  reduce using rule 2 (program)
+
+
+状態 11
+
+    8 list: LIST_START expression LIST_END .
+
+    $default  reduce using rule 8 (list)
+
+
+状態 12
+
+    9 list_expression: expression . list_expression
+   10                | expression .
+
+    INTEGER     shift, and go to state 1
+    SYMBOL      shift, and go to state 2
+    STRING      shift, and go to state 3
+    LIST_START  shift, and go to state 4
+
+    $default  reduce using rule 10 (list_expression)
+
+    expression       go to state 12
+    list             go to state 7
+    list_expression  go to state 14
+
+
+状態 13
+
+    7 list: LIST_START expression list_expression . LIST_END
+
+    LIST_END  shift, and go to state 15
+
+
+状態 14
+
+    9 list_expression: expression list_expression .
+
+    $default  reduce using rule 9 (list_expression)
+
+
+状態 15
+
+    7 list: LIST_START expression list_expression LIST_END .
+
+    $default  reduce using rule 7 (list)

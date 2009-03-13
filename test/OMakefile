@@ -1,0 +1,14 @@
+#CFLAGS = -g -I ../include
+#CFLAGS = -g -I../include -I/usr/local/include -L/usr/local/lib -ltokyocabinet -lz -lbz2 -lrt -l
+CFLAGS = -g -I../include -lz -lbz2 -lrt -lpthread -lm -lc
+
+#LIBS = ../src/libtonburi.a
+#LIBS = ../src/libtonburi /usr/lib/libtokyocabinet
+LIBS = ../src/libtonburi /usr/local/lib/libtokyocabinet
+CProgram(test, test)
+
+.PHONY: run
+run: test ../example/test1.scm
+  ./test -f ../example/test1.scm
+
+.DEFAULT: run

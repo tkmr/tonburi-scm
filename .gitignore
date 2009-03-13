@@ -1,0 +1,12 @@
+.omakedb
+.omakedb.lock
+*~
+#.*#
+TAGS
+GTAGS
+GSYMS
+GRTAGS
+GPATH
+*.omc
+a.out
+*.o

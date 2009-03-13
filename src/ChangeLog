@@ -1,0 +1,8 @@
+2009-02-27  tatsuya takamura  <tatsuya@ubuntu-dev>
+
+	* string.c (newString): なんかバグってた、、あれ？何故だろ
+
+2009-02-23  Tatsuya Takamura  <takamura@msj-ubuntu01.mscorp.com>
+
+	* lisp.c (eval): 原型を作成、次は sLambda とシンボルの操作辺り
+
