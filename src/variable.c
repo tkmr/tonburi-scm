@@ -212,14 +212,14 @@ static sExpression *definitionValue(sExpression *exp, sEnvironment *env){
     }else{
       sExpression *parameters = cdr(toList(temp));
       sExpression *body = cdr(toList( cdr(toList(exp))));
-      return newList(3,
-                     newSymbol("lambda"),
-                     parameters,
-                     body);
+      return cons(newSymbol("lambda"),
+                  cons(parameters,
+                       body));
     }
   }
   return &sNull;
 }
+
 
 sExpression *evalDefine(sExpression *exp, sEnvironment *env){
   if(defineVariable(definitionSymbol(exp), eval(definitionValue(exp, env), env), env)){

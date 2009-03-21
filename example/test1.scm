@@ -147,3 +147,49 @@
 ((lambda (x y)
    (print x)
    (print y)) 12 34)
+
+(define-syntax begin
+  (syntax-rules ()
+    ((begin _b ...)
+     ((lambda ()
+        _b ...)))))
+
+(begin
+  (print "hello---")
+  (print "world---"))
+
+(define (fact n)
+  (if (= n 1)
+      1
+      (* n (fact (- n 1)))))
+
+(print (fact 10))
+
+(print
+ ((lambda (n)
+   ((lambda (fact)
+      (fact fact n))
+    (lambda (f k)
+      (if (= k 1)
+          1
+          (* k (f f (- k 1)))))))
+  8))
+
+(print "Y combinator-----")
+
+(define Y
+  (lambda (f)
+    ((lambda (proc)
+       (f (lambda (arg) ((proc proc) arg))))
+     (lambda (proc)
+       (f (lambda (arg) ((proc proc) arg)))))))
+
+(define fact_y
+  (lambda (me)
+    (lambda (n)
+      (if (= n 1)
+          1
+          (* n (me (- n 1)))))))
+
+(print
+ ((Y fact_y) 8))
