@@ -76,6 +76,7 @@ sExpression *evalDefine(sExpression *exp, sEnvironment *env);
 sExpression *evalSequence(sList *exps, sEnvironment *env);
 sExpression *evalDefineSyntax(sExpression *exp, sEnvironment *env);
 sExpression *evalSyntaxRule(sSyntax *syntax, sExpression *body);
+sExpression *evalSyntaxRuleIter(sExpression *syntax, sExpression *parameters, sExpression *rule);
 sExpression *apply(sExpression *procOrLambda, sExpression *arguments);
 sExpression *applyProc(sProc *proc, sExpression *arguments);
 sExpression *readScheme(char *code);

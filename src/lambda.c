@@ -54,7 +54,7 @@ static sList *checkParameters(sLambda *lamd, sList *parameters){
   }
 
   sExpression *temp1 = car(parameters);
-  if(isSymbol(temp1) && strcmp(toSymb(temp1)->name, ".") == 0){
+  if(isSymbol(temp1) && (strcmp((toSymb(temp1))->name, ".") == 0)){
     lamd->isVarArgument = TRUE;
     return toList(cons(cadr(parameters),
                        &sNull));
@@ -69,6 +69,9 @@ sExpression *newLambda(sList *parameters, sList *body, sEnvironment *env){
   sLambda *lamd = (sLambda *)malloc(sizeof(sLambda));
   lamd->isVarArgument = FALSE;
   lamd->parameters = checkParameters(lamd, parameters);
+
+  //printExp(car(body));
+
   lamd->body = body;
   lamd->frame = env;
   sExpression *exp = newExp(lamd, LAMBDA_TAG);

@@ -1,6 +1,7 @@
 #CFLAGS = -g -I ../include
 #CFLAGS = -g -I../include -I/usr/local/include -L/usr/local/lib -ltokyocabinet -lz -lbz2 -lrt -l
-CFLAGS = -g -I../include -lz -lbz2 -lrt -lpthread -lm -lc
+#CFLAGS = -g -I../include -lz -lbz2 -lrt -lpthread -lm -lc
+CFLAGS = -g -I../include -lz -lbz2 -lpthread -lm -lc
 
 #LIBS = ../src/libtonburi.a
 #LIBS = ../src/libtonburi /usr/lib/libtokyocabinet

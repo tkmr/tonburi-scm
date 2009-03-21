@@ -1,11 +1,6 @@
 (define (number? x)
   (equalType? x 1))
 
-(define (and a b)
-  (if a
-      b
-      #f))
-
 (define (or a b)
   (if a #t (if b #t #f)))
 
@@ -75,16 +70,80 @@
 
 (define-syntax delay
   (syntax-rules (x)
-    ((_ ...)
+    ((_ b ...)
      ((lambda ()
         (lambda ()
-          ...))))))
+          b ...))))))
 
 (define (force delayed)
   (delayed))
 
+(print "---before delayed---")
 (define delayprint (delay (print "this is delayed print")))
 (print "---delayed---")
 
 (force delayprint)
 
+(define-syntax incf
+  (syntax-rules (x)
+    ((_ x) (set! x (+ x 1)))
+    ((_ x i) (set! x (+ x i)))))
+
+(define x1 100)
+(print x1)
+(incf x1)
+(print x1)
+(incf x1 90)
+(print x1)
+
+(define-syntax mc_test
+  (syntax-rules (x)
+    ((_ a ...) (list a ...))))
+
+(print (mc_test 1 2 3 4 5 6 7))
+
+(define-syntax and
+  (syntax-rules (x)
+    ((and) #t)
+    ((and test) test)
+    ((and test1 test2)
+     (if test1
+         test2
+         #f))
+    ((and test1 test2 ...)
+     (if test1
+         (and test2 ...)
+         #f))))
+
+(print (and #t #t #t #t))
+
+(define-syntax let
+  (syntax-rules ()
+    ((let ((_k _v) ...) _b ...)
+     ((lambda (_k ...) _b ...) _v ...))))
+
+(let ((aa "world"))
+  (print "hello")
+  (print "hoge"))
+
+(define-syntax letrec
+  (syntax-rules ()
+    ((letrec ((var1 init1)) body ...)
+     ((lambda (var1)
+        (let ((temp1 "undefined"))
+          (set! temp1 var1)
+          body ...)) init1))
+    ((letrec ((var1 init1) params ...) body ...)
+     (letrec (params ...)
+       ((lambda (var1)
+          (let ((temp1 "undefined"))
+            (set! temp1 var1)
+            body ...)) init1)))))
+
+(letrec ((lc1 "hello") (lc2 lc1))
+  (print lc1)
+  (print lc2))
+
+((lambda (x y)
+   (print x)
+   (print y)) 12 34)

@@ -47,11 +47,10 @@ int getLexInput(char *buffer, int max_size){
 }
 
 sExpression *getYaccResult(sEnvironment *env){
-  sExpression *temp = newList(1,
-                              newList(3,
-                                      newSymbol("lambda"),
-                                      cons(&sNull, &sNull),
-                                      yaccResult));
+  sExpression *temp = cons(cons(newSymbol("lambda"),
+                                cons(cons(&sNull, &sNull),
+                                     yaccResult)),
+                           &sNull);
   return temp;
 }
 

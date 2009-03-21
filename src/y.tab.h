@@ -65,7 +65,7 @@ typedef union YYSTYPE
   char     *string_value;
   sExpression *expression_type;
 }
-/* Line 1489 of yacc.c.  */
+/* Line 1529 of yacc.c.  */
 #line 70 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

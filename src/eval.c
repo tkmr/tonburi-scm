@@ -30,6 +30,7 @@ sExpression *eval(sExpression *exp, sEnvironment *env){
   {
     return evalDefine(exp, env);
   }
+  /* (define-syntax name ...) */
   else if(isDefinitionSyntax(exp))
   {
     return evalDefineSyntax(exp, env);
@@ -44,11 +45,11 @@ sExpression *eval(sExpression *exp, sEnvironment *env){
   {
     sList *body;
     sList *param = toList( cadr(toList(exp)));
-    sExpression *temp = cadr(toList( cdr(toList(exp))));
+    sExpression *temp = cdr(toList( cdr(toList(exp))));
     if(isList(temp)){
       body = toList(temp);
     }else{
-      body = cons(temp, &sNull);
+      body = toList(cons(temp, &sNull));
     }
     return newLambda(param, body, env);
   }
@@ -111,7 +112,7 @@ static sList *checkParameters(sList *parameters, sList *arguments){
   if(isList(temp)){
     return toList(temp);
   }else{
-    return cons(&sNull, &sNull);
+    return toList(cons(&sNull, &sNull));
   }
 }
 
