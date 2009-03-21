@@ -62,14 +62,21 @@ sExpression *eval(sExpression *exp, sEnvironment *env){
   /* the other list (x . y) */
   else if(isApplication(exp))
   {
-    sExpression *proexp = eval(operator(toList(exp)), env);
-    if(isLambdaType(proexp) || isPrimitiveProc(proexp)){
-      sExpression *operand = operands(toList(exp));
-      sExpression *arguments = listOfValues(operand, env);
-      return apply(proexp, arguments);
+    if(LAZY_EVAL){
+      sExpression *proexp = actualValue(operator(toList(exp)), env);
+      if(isLambdaType(proexp) || isPrimitiveProc(proexp)){
+        sExpression *operand = operands(toList(exp));
+        return applyLazly(proexp, operand, env);
+      }
+    }else{
+      sExpression *proexp = eval(operator(toList(exp)), env);
+      if(isLambdaType(proexp) || isPrimitiveProc(proexp)){
+        sExpression *operand = operands(toList(exp));
+        sExpression *arguments = listOfValues(operand, env);
+        return apply(proexp, arguments, env);
+      }
     }
   }
-
   return &sError;
 }
 
@@ -87,7 +94,7 @@ static sExpression *checkArgumentsIter(sExpression *parameters, sExpression *arg
     return arguments;
   }
 }
-static sList *checkArguments(sList *parameters, sList *arguments, Bool isVarArgument){
+sList *checkArguments(sList *parameters, sList *arguments, Bool isVarArgument){
   return toList(checkArgumentsIter(newExp(parameters, LIST_TAG),
                                    newExp(arguments,  LIST_TAG),
                                    isVarArgument));
@@ -105,7 +112,7 @@ static sExpression *checkParametersIter(sExpression *parameters, sExpression *ar
   }
   return &sNull;
 }
-static sList *checkParameters(sList *parameters, sList *arguments){
+sList *checkParameters(sList *parameters, sList *arguments){
   sExpression *temp = checkParametersIter(newExp(parameters, LIST_TAG),
                                           newExp(arguments,  LIST_TAG));
 
@@ -116,7 +123,7 @@ static sList *checkParameters(sList *parameters, sList *arguments){
   }
 }
 
-sExpression *apply(sExpression *procOrLambda, sExpression *argument){
+sExpression *apply(sExpression *procOrLambda, sExpression *argument, sEnvironment *env){
   if(isPrimitiveProc(procOrLambda))
   {
     sProc *cfunc = toProc(procOrLambda);
@@ -174,10 +181,10 @@ sExpression *evalIf(sList *arguments, sEnvironment *env){
   sExpression *temp = cdr(arguments);
   if(isList(temp)){
     sList *args = toList(temp);
-    sExpression *predicate = car(args);
+    sExpression *predicate = LAZY_EVAL ? actualValue(args, env) : eval(car(args), env);
     sExpression *trueExp   = car(toList(cdr(args)));
     sExpression *falseExp  = car(toList(cdr(toList(cdr(args)))));
-    if(isTrue(eval(predicate, env))){
+    if(isTrue(predicate)){
       return eval(trueExp, env);
     }else{
       return eval(falseExp, env);

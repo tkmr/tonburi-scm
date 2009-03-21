@@ -47,7 +47,7 @@ Bool isApplication(sExpression *exp){
   return FALSE;
 }
 
-static sList *checkParameters(sLambda *lamd, sList *parameters){
+static sList *checkLambdaParameters(sLambda *lamd, sList *parameters){
   if(isNull(cdr(parameters))){
     return toList(cons(car(parameters),
                        &sNull));
@@ -61,14 +61,14 @@ static sList *checkParameters(sLambda *lamd, sList *parameters){
   }
   else{
     return toList(cons(temp1,
-                       newExp(checkParameters(lamd, toList(cdr(parameters))), LIST_TAG)));
+                       newExp(checkLambdaParameters(lamd, toList(cdr(parameters))), LIST_TAG)));
   }
 }
 
 sExpression *newLambda(sList *parameters, sList *body, sEnvironment *env){
   sLambda *lamd = (sLambda *)malloc(sizeof(sLambda));
   lamd->isVarArgument = FALSE;
-  lamd->parameters = checkParameters(lamd, parameters);
+  lamd->parameters = checkLambdaParameters(lamd, parameters);
 
   //printExp(car(body));
 

@@ -1,6 +1,14 @@
-(define (fact n)
-  (if (= n 1)
-      1
-      (* n (fact (- n 1)))))
+(print "start: lazy eval-----")
+(define unless
+  (lambda (p t f)
+    (if p f t)))
 
-(fact 8)
+(print "1: lazy eval-----")
+(define hoge
+  (unless (= 1 0)
+          (print "OK")
+          (print "NG")))
+
+(print "2: lazy eval-----")
+(print hoge)
+(print "3: lazy eval-----")

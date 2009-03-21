@@ -52,9 +52,14 @@ typedef struct {
   cFuncPointer Func;
 } sProc;
 
+typedef struct {
+  sExpression *exp;
+  sEnvironment *env;
+} sThunk;
+
 typedef enum{
   NULL_TAG, TRUE_TAG, FALSE_TAG, NUMBER_TAG, SYMBOL_TAG,
-  LIST_TAG, LAMBDA_TAG, STRING_TAG, PROC_TAG, ERROR_TAG, EXPRESSION_TAG, SYNTAX_TAG
+  LIST_TAG, LAMBDA_TAG, STRING_TAG, PROC_TAG, ERROR_TAG, EXPRESSION_TAG, SYNTAX_TAG, THUNK_TAG
 } sType;
 
 int sTypeSize[60];
@@ -77,7 +82,7 @@ sExpression *evalSequence(sList *exps, sEnvironment *env);
 sExpression *evalDefineSyntax(sExpression *exp, sEnvironment *env);
 sExpression *evalSyntaxRule(sSyntax *syntax, sExpression *body);
 sExpression *evalSyntaxRuleIter(sExpression *syntax, sExpression *parameters, sExpression *rule);
-sExpression *apply(sExpression *procOrLambda, sExpression *arguments);
+sExpression *apply(sExpression *procOrLambda, sExpression *arguments, sEnvironment *env);
 sExpression *applyProc(sProc *proc, sExpression *arguments);
 sExpression *readScheme(char *code);
 sExpression *car(sList *list);
@@ -109,6 +114,7 @@ Bool isErrorType(sExpression *exp);
 Bool isSyntaxRule(sExpression *exp);
 Bool isSyntaxRules(sExpression *exp);
 Bool isNoParent(sEnvironment *env);
+Bool isThunk(sExpression *exp);
 Bool setVariable(sSymbol *symbol, sExpression *value, sEnvironment *env);
 Bool defineVariable(sSymbol *symbol, sExpression *value, sEnvironment *env);
 Bool defineProc(cFuncPointer cfunction, char *name, sEnvironment *env);
@@ -122,6 +128,7 @@ sExpression *newSyntax(sList *rules, sList *syntaxes);
 sExpression *newExp(void *value, sType type);
 sExpression *newProc(cFuncPointer cfunction);
 sExpression *newList(int argnum, ...);
+sExpression *newThunk(sExpression *exp, sEnvironment *env);
 sExpression *lookupVariable(sSymbol *symbol, sEnvironment *env);
 sExpression *textOfQuoted(sExpression *exp);
 sExpression *listOfValues(sExpression *exp, sEnvironment *env);
@@ -135,6 +142,7 @@ sEnvironment *extendEnvironment(sList *parameterNames, sList *arguments, sEnviro
 #define toString(name) ((sString *)(name->value))
 #define toProc(name)   ((sProc *)(name->value))
 #define toSyntax(name) ((sSyntax *)(name->value))
+#define toThunk(name) ((sThunk *)(name->value))
 Bool firstSymbol(sList *list, char *name);
 void printExp(sExpression *exp);
 void fprintExp(sExpression *exp, FILE *fp);
@@ -147,3 +155,12 @@ void initPrimitiveProcs();
 void initPrimitiveVariable();
 void driveInterctiveLoop(FILE *fpin, FILE *fpout, int evalLine);
 Bool callProcSymbolEqualSub(sExpression *temp1, sExpression *temp2);
+
+/* for lazy evaluate ----------------------------------------- */
+sExpression *forceIt(sExpression *obj);
+sExpression *delayIt(sExpression *exp, sEnvironment *env);
+sExpression *actualValue(sExpression *exp, sEnvironment *env);
+sExpression *applyLazly(sExpression *procOrLambda, sExpression *arguments, sEnvironment *env);
+#define LAZY_EVAL 1
+sList *checkArguments(sList *parameters, sList *arguments, Bool isVarArgument);
+sList *checkParameters(sList *parameters, sList *arguments);

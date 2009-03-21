@@ -1,7 +1,7 @@
 #CFLAGS = -g -Wall -I../include
 CFLAGS = -g -Wall -I../include -ltokyocabinet -lz -lbz2 -lrt -lpthread -lm -lc
 
-LIB_FILES = misc variable quote number list lambda string eval proc y.tab lex.yy read syntax
+LIB_FILES = misc variable quote number list lambda string eval proc y.tab lex.yy read syntax lazy
 StaticCLibrary(libtonburi, $(LIB_FILES))
 
 y.tab.c: read.y
