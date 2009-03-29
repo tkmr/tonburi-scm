@@ -14,6 +14,9 @@
   }
 %}
 %%
+"'" {
+  return QUOTE;
+}
 "(" {
   return LIST_START;
 }

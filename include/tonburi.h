@@ -54,6 +54,7 @@ typedef struct {
 
 typedef struct {
   sExpression *exp;
+  sExpression *evaledExp;
   sEnvironment *env;
 } sThunk;
 
@@ -157,10 +158,10 @@ void driveInterctiveLoop(FILE *fpin, FILE *fpout, int evalLine);
 Bool callProcSymbolEqualSub(sExpression *temp1, sExpression *temp2);
 
 /* for lazy evaluate ----------------------------------------- */
+#define LAZY_EVAL 1
 sExpression *forceIt(sExpression *obj);
 sExpression *delayIt(sExpression *exp, sEnvironment *env);
 sExpression *actualValue(sExpression *exp, sEnvironment *env);
 sExpression *applyLazly(sExpression *procOrLambda, sExpression *arguments, sEnvironment *env);
-#define LAZY_EVAL 1
 sList *checkArguments(sList *parameters, sList *arguments, Bool isVarArgument);
 sList *checkParameters(sList *parameters, sList *arguments);

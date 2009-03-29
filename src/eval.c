@@ -181,7 +181,12 @@ sExpression *evalIf(sList *arguments, sEnvironment *env){
   sExpression *temp = cdr(arguments);
   if(isList(temp)){
     sList *args = toList(temp);
-    sExpression *predicate = LAZY_EVAL ? actualValue(args, env) : eval(car(args), env);
+    sExpression *predicate;
+    if(LAZY_EVAL){
+      predicate = actualValue(car(args), env);
+    }else{
+      predicate = eval(car(args), env);
+    }
     sExpression *trueExp   = car(toList(cdr(args)));
     sExpression *falseExp  = car(toList(cdr(toList(cdr(args)))));
     if(isTrue(predicate)){

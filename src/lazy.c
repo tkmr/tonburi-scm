@@ -8,13 +8,17 @@ Bool isThunk(sExpression *obj){
 sExpression *newThunk(sExpression *exp, sEnvironment *env){
   sThunk *thunkObj = (sThunk *)malloc(sizeof(sThunk));
   thunkObj->exp = exp;
+  thunkObj->evaledExp = &sNull;
   thunkObj->env = env;
   return newExp(thunkObj, THUNK_TAG);
 }
 
 sExpression *forceIt(sExpression *obj){
   if(isThunk(obj)){
-    return actualValue(toThunk(obj)->exp, toThunk(obj)->env);
+    if(toThunk(obj)->evaledExp == &sNull){
+      toThunk(obj)->evaledExp = actualValue(toThunk(obj)->exp, toThunk(obj)->env);
+    }
+    return toThunk(obj)->evaledExp;
   }else{
     return obj;
   }
@@ -25,7 +29,7 @@ sExpression *delayIt(sExpression *exp, sEnvironment *env){
 }
 
 sExpression *actualValue(sExpression *exp, sEnvironment *env){
-  forceIt(eval(exp, env));
+  return forceIt(eval(exp, env));
 }
 
 static sExpression *listOfActualValues(sExpression *exps, sEnvironment *env){

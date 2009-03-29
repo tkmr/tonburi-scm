@@ -43,7 +43,8 @@
      SYMBOL = 259,
      STRING = 260,
      LIST_START = 261,
-     LIST_END = 262
+     LIST_END = 262,
+     QUOTE = 263
    };
 #endif
 /* Tokens.  */
@@ -52,6 +53,7 @@
 #define STRING 260
 #define LIST_START 261
 #define LIST_END 262
+#define QUOTE 263
 
 
 
@@ -65,8 +67,8 @@ typedef union YYSTYPE
   char     *string_value;
   sExpression *expression_type;
 }
-/* Line 1529 of yacc.c.  */
-#line 70 "y.tab.h"
+/* Line 1489 of yacc.c.  */
+#line 72 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -15,6 +15,7 @@
 %token <string_value> STRING
 %token LIST_START
 %token LIST_END
+%token QUOTE
 %type  <expression_type> expression list list_expression
 %%
 program
@@ -28,7 +29,11 @@ program
   }
   ;
 expression
-  : list
+  : QUOTE expression
+  {
+    $$ = cons(newSymbol("quote"), cons($2, &sNull));
+  }
+  | list
   | INTEGER
   {
     $$ = newNumber($1);
