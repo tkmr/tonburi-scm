@@ -60,7 +60,7 @@ typedef struct {
 
 typedef enum{
   NULL_TAG, TRUE_TAG, FALSE_TAG, NUMBER_TAG, SYMBOL_TAG,
-  LIST_TAG, LAMBDA_TAG, STRING_TAG, PROC_TAG, ERROR_TAG, EXPRESSION_TAG, SYNTAX_TAG, THUNK_TAG
+  LIST_TAG, LAMBDA_TAG, STRING_TAG, PROC_TAG, ERROR_TAG, EXPRESSION_TAG, SYNTAX_TAG, THUNK_TAG, ENV_TAG
 } sType;
 
 int sTypeSize[60];
@@ -89,6 +89,9 @@ sExpression *readScheme(char *code);
 sExpression *car(sList *list);
 sExpression *cdr(sList *list);
 sExpression *cadr(sList *list);
+sExpression *caddr(sList *list);
+sExpression *cadddr(sList *list);
+sExpression *caddddr(sList *list);
 sExpression *cons(sExpression *left, sExpression *right);
 sExpression *cloneList(sExpression *exp);
 Bool isAtom(sExpression *exp);
@@ -165,3 +168,10 @@ sExpression *actualValue(sExpression *exp, sEnvironment *env);
 sExpression *applyLazly(sExpression *procOrLambda, sExpression *arguments, sEnvironment *env);
 sList *checkArguments(sList *parameters, sList *arguments, Bool isVarArgument);
 sList *checkParameters(sList *parameters, sList *arguments);
+
+/* for nondeterministic programming -------------------------- */
+#define NONDETERM_EVAL 1
+Bool isAmb(sExpression *exp);
+sExpression *ambChoices(sExpression *exps);
+sExpression *ambEval(sExpression *exp, sEnvironment *env, sExpression *succeed, sExpression *fail);
+sExpression *ambEvalSequence(sExpression *exps, sEnvironment *env, sExpression *succeed, sExpression *fail);

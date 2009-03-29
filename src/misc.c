@@ -31,6 +31,7 @@ void initGlobalEnvironment(){
   sTypeSize[EXPRESSION_TAG] = sizeof(sExpression);
   sTypeSize[SYNTAX_TAG] = sizeof(sSyntax);
   sTypeSize[THUNK_TAG] = sizeof(sThunk);
+  sTypeSize[ENV_TAG] = sizeof(sEnvironment);
 
   sGlobalEnvironment = newEnvironment(cons(&sNull, &sNull), cons(&sNull, &sNull));
   initPrimitiveProcs();

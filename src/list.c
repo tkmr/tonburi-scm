@@ -39,7 +39,25 @@ sExpression *cadr(sList *list){
   if(isList(right)){
     return car(toList(right));
   }
-  return &sNull;
+  return &sError;
+}
+sExpression *caddr(sList *list){
+  if(isList(cdr(list))){
+    return cadr(toList(cdr(list)));
+  }
+  return &sError;
+}
+sExpression *cadddr(sList *list){
+  if(isList(cdr(list))){
+    return caddr(toList(cdr(list)));
+  }
+  return &sError;
+}
+sExpression *caddddr(sList *list){
+  if(isList(cdr(list))){
+    return cadddr(toList(cdr(list)));
+  }
+  return &sError;
 }
 
 sExpression *cons(sExpression *left, sExpression *right){
