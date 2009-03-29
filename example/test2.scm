@@ -94,16 +94,19 @@
    (list-ref fib-numbers 10)
 
    (define primes
-     (list-filter prime? numbers))
+     (list-filter prime?
+                  (list-filter (lambda (n)(> n 1)) numbers)))
 
    (define (prime? n)
      (define (iter ps)
-       (cond ((> (square (car ps)) n) #t)
-             ((divisible? n (car ps)) #f)
-             (else (iter (cdr ps)))))
+       (if (> (square (car ps)) n)
+           #t
+           (if (divisible? n (car ps))
+               #f
+               (iter (cdr ps)))))
      (iter primes))
 
-   (list-ref primes 5)
+   (list-ref primes 10)
 
    "done"
  ))
