@@ -158,7 +158,7 @@ void driveInterctiveLoop(FILE *fpin, FILE *fpout, int evalLine);
 Bool callProcSymbolEqualSub(sExpression *temp1, sExpression *temp2);
 
 /* for lazy evaluate ----------------------------------------- */
-#define LAZY_EVAL 1
+#define LAZY_EVAL 0
 sExpression *forceIt(sExpression *obj);
 sExpression *delayIt(sExpression *exp, sEnvironment *env);
 sExpression *actualValue(sExpression *exp, sEnvironment *env);

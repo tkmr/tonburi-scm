@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
   initGlobalEnvironment();
 
   FILE *fp;
-  fp = fopen("/home/tatsuya/Dropbox/HomeDev/tonburi/example/test2.scm", "r");
+  fp = fopen("/home/tatsuya/Dropbox/HomeDev/tonburi/example/test1.scm", "r");
   driveInterctiveLoop(fp, sSTDOUT, 0);
   fclose(fp);
   return 0;
